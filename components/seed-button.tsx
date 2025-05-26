@@ -1,8 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Loader2, Database } from "lucide-react"
+import { Loader2 } from "lucide-react"
 
 export function SeedButton() {
   const [isLoading, setIsLoading] = useState(false)
@@ -26,19 +25,12 @@ export function SeedButton() {
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <Button onClick={handleSeed} disabled={isLoading} variant="outline" className="flex items-center gap-2">
-        {isLoading ? (
-          <>
-            <Loader2 className="h-4 w-4 animate-spin" />
-            <span>Seeding...</span>
-          </>
-        ) : (
-          <>
-            <Database className="h-4 w-4" />
-            <span>Seed Sample Data</span>
-          </>
-        )}
-      </Button>
+      {isLoading && (
+        <div className="flex items-center gap-2">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          <span>Seeding...</span>
+        </div>
+      )}
       {message && <p className="text-sm text-muted-foreground">{message}</p>}
     </div>
   )

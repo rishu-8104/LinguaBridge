@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useLanguage } from "./language-provider"
 import { getBlogPosts } from "@/lib/blog-service"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -14,6 +14,11 @@ export default function BlogList() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null)
+  const [refreshTrigger, setRefreshTrigger] = useState(0)
+
+  const refreshPosts = useCallback(() => {
+    setRefreshTrigger((prev) => prev + 1)
+  }, [])
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -31,7 +36,7 @@ export default function BlogList() {
     }
 
     fetchPosts()
-  }, [language])
+  }, [language, refreshTrigger])
 
   const handlePostClick = (post: BlogPost) => {
     setSelectedPost(post)
@@ -99,3 +104,6 @@ export default function BlogList() {
     </>
   )
 }
+
+// Export the refreshPosts function
+export type { BlogPost }

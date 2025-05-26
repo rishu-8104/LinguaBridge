@@ -4,6 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { useLanguage } from "./language-provider"
+import { useBlog } from "./blog-context"
 import { createBlogPost } from "@/lib/blog-service"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
@@ -18,6 +19,7 @@ interface BlogFormProps {
 
 export default function BlogForm({ onClose }: BlogFormProps) {
   const { t, language } = useLanguage()
+  const { refreshBlogList } = useBlog()
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -32,6 +34,7 @@ export default function BlogForm({ onClose }: BlogFormProps) {
 
     try {
       await createBlogPost({ title, content, sourceLanguage: language })
+      refreshBlogList() // Refresh the blog list after successful submission
       onClose()
     } catch (error) {
       console.error("Error creating blog post:", error)
